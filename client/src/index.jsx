@@ -20,11 +20,18 @@ class App extends React.Component {
         "release_date": "2011-06-01"
       }],
       favorites: [{ deway: "favorites" }],
-      showFaves: false,
+      showFaves: false
     };
 
     // you might have to do something important here!
     this.getMovies = this.getMovies.bind(this);
+    this.saveMovie = this.saveMovie.bind(this);
+    this.swapFavorites = this.swapFavorites.bind(this);
+    this.deleteMovie = this.deleteMovie.bind(this);
+  }
+
+  componentDidMount() {
+    this.getFav();
   }
 
   getMovies(clickedGenreId) {
@@ -47,12 +54,52 @@ class App extends React.Component {
       });
   }
 
-  saveMovie() {
-    // same as above but do something diff
+  saveMovie(movie) {
+    // save movie post req
+    axios({
+      method: 'post',
+      url: '/movies/save',
+      data: {
+        movie: movie
+      }
+    })
+      .then(({ data }) => {
+        console.log('saved data', data);
+      })
+      .catch((err) => { console.log('failed to save the movie', err) });
   }
 
-  deleteMovie() {
+  getFav() {
+    axios({
+      method: 'get',
+      url: '/movies/fav'
+    })
+      .then(({ data }) => {
+        this.setState({
+          favorites: data
+        }, () => {
+          console.log('after set the fav', this.state.favorites)
+        })
+      })
+      .catch((err) => {
+        console.log('failed to get favorites', err);
+      })
+  }
+
+  deleteMovie(movie) {
     // same as above but do something diff
+    axios({
+      method: 'delete',
+      url: '/movies/delete',
+      data: {
+        movieId: movie.id
+      }
+    })
+      .then(() => {
+        this.getFav();
+        console.log('deleted successfully')
+      })
+      .catch((err) => { console.log('delete err', err) });
   }
 
   swapFavorites() {
@@ -76,6 +123,8 @@ class App extends React.Component {
           <Movies
             movies={this.state.showFaves ? this.state.favorites : this.state.movies}
             showFaves={this.state.showFaves}
+            saveMovie={this.saveMovie}
+            deleteMovie={this.deleteMovie}
           />
         </div>
       </div>

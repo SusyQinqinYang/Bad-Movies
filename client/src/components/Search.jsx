@@ -56,11 +56,14 @@ class Search extends React.Component {
         <br /><br />
         {/* Make the select options dynamic from genres !!! */}
         {/* How can you tell which option has been selected from here? */}
-
+        {/* control component: on change deal with the input value, that is control component
+https://reactjs.org/docs/forms.html */}
         <select
           value={this.state.selectedId}
           name="selectedId"
-          onChange={this.handleGenreChange}//the process, maybe: invoke the function. target value from line 61. line 63 get the value from 68 the selected one.
+          onChange={this.handleGenreChange}
+        //the process, maybe: invoke the function. target value from line 61. line 63 get the 
+        //value from 68 the selected one.
         >
           {this.state.genres.map((genre) => (
             <option

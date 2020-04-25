@@ -7,6 +7,7 @@ const movieController = require('../controllers/movieController.js');
 router.get('/search', movieController.getSearch);
 router.get('/genres', movieController.getGenres);
 router.post('/save', movieController.saveMovie);
+router.get('/fav', movieController.getFav);
 router.delete('/delete', movieController.deleteMovie);
 
 module.exports = router;

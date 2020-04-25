@@ -3,10 +3,11 @@ import React from 'react';
 class Movies extends React.Component {
   constructor(props) {
     super(props)
-    //   <Movies
-    //   movies={this.state.showFaves ? this.state.favorites : this.state.movies}
-    //   showFaves={this.state.showFaves}
-    // />
+    // movies={this.state.showFaves ? this.state.favorites : this.state.movies}
+    // showFaves={this.state.showFaves}
+    // saveMovie={this.saveMovie}
+    // deleteMovie={this.deleteMovie}
+    this.handleSaveOrDelete = this.handleSaveOrDelete.bind(this);
   }
 
   // Make an onClick for each list item. If the movies shown is the search results, 
@@ -15,15 +16,30 @@ class Movies extends React.Component {
   // If you're currently showing the fave list, delete the movie instead
   // You can tell which list is currently being rendered based on whether the prop "showFaves" is false (search results) or true (fave list) (within index.jsx)
 
+  handleSaveOrDelete(movie) {
+    if (!this.props.showFaves) {
+      //currently showing movie results.
+      this.props.saveMovie(movie);
+    } else {
+      console.log(this.props.deleteMovie);
+      this.props.deleteMovie(movie);
+    }
+  }
+
   render() {
-    // console.log('movie in Movies', this.props.movies[0]);
     return (
       <ul className="movies">
-        {/* Make this list dynamic! */}
         {this.props.movies.map((movie) => {
           return (
-            <li key={movie.id} className="movie_item">
+            <li
+              className="movie_item"
+              value={movie.id}
+              key={movie.id}
+              //can't passing in value attribute into js function as arg. because i is html another is js.
+              onClick={() => { this.handleSaveOrDelete(movie) }}
+            >
               <img src={`https://image.tmdb.org/t/p/original${movie.poster_path}`} />
+              {/* <img src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} /> */}
               <div className="movie_description">
                 <h2>{movie.title}</h2>
                 <section className="movie_details">

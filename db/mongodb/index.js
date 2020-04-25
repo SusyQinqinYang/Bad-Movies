@@ -1,4 +1,45 @@
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/badMovies', { useNewUrlParser: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'db connection error:'));
+db.once('open', () => {
+    console.log('connected to db...')
+})
 
+const movieSchema = mongoose.Schema({
+    popularity: Number,
+    poster_path: { type: String, unique: true },
+    id: { type: Number, unique: true },
+    backdrop_path: String,
+    title: String,
+    release_date: String
+});
+
+const Movie = mongoose.model('Movie', movieSchema);
+
+const save = (movieForSave) => {
+
+    let movie = new Movie({
+        popularity: movieForSave.popularity,
+        poster_path: movieForSave.poster_path,
+        id: movieForSave.id,
+        backdrop_path: movieForSave.backdrop_path,
+        title: movieForSave.title,
+        release_date: movieForSave.release_date
+    });
+    return movie.save();
+}
+
+const retrieve = () => {
+    return Movie.find().exec();
+}
+
+const deleteMovie = (id) => {
+    return Movie.findOneAndDelete({ "id": id }).exec();
+};
+
+
+module.exports = { save, retrieve, deleteMovie };
 
 
 

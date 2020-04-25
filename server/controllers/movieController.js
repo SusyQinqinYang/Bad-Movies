@@ -17,6 +17,7 @@ module.exports = {
       })
       .catch((err) => {
         console.log('getMovies axios error', err);
+        res.sendStatus(404);
       })
   },
   getGenres: (req, res) => {
@@ -29,13 +30,48 @@ module.exports = {
       })
       .catch((err) => {
         console.log('getGenres axios error', err);
-        res.sendStatus(500);
+        res.sendStatus(404);
       })
   },
-  saveMovie: (req, res) => {
 
+  /*res.sendStatus(201);//don't use sendStatus. it would conflict with 
+  the express auto created status and cause double header. because 1 status sent 
+  by express. and yourself are sending another one.
+  use res.status to custom your own code if you don't want express to auto identify one for you.*/
+  saveMovie: (req, res) => {
+    let movieForSave = req.body.movie;
+    movieModel.save(movieForSave)
+      .then((result) => {
+        console.log('result after saving', result);
+        res.status(201).json(result);
+      })
+      .catch((err) => {
+        console.log('save axios error', err);
+        res.status(500).json('save failed');
+      })
   },
+
+  getFav: (req, res) => {
+    movieModel.retrieve()
+      .then((result) => {
+        console.log('fav result from db', result);
+        res.json(result);
+      })
+      .catch((err) => {
+        console.log('get fav axios error', err);
+        res.status(500).json('get fav failed');
+      })
+  },
+
   deleteMovie: (req, res) => {
+    movieModel.deleteMovie(req.body.movieId)
+      .then(() => {
+        res.send('deleted');
+      })
+      .catch((err) => {
+        console.log('delete err', err);
+        res.send('delete failed');
+      })
 
   }
 }
