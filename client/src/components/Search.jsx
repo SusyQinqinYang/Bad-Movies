@@ -44,8 +44,8 @@ class Search extends React.Component {
     });
   }
 
-  handleSearchChange(e) {
-    e.preventDefault();
+  handleSearchChange() {
+    // e.preventDefault();
     this.props.getMovies(this.state.selectedId);
   }
 

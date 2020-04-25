@@ -46,6 +46,7 @@ class App extends React.Component {
       .then(({ data }) => {
         console.log('data from search movie', data);
         this.setState({
+          showFaves: false,
           movies: data
         }, () => { console.log('set movie', this.state.movies) })
       })
@@ -64,7 +65,8 @@ class App extends React.Component {
       }
     })
       .then(({ data }) => {
-        console.log('saved data', data);
+        alert('Movie has been saved to your favorites');
+        this.getFav();
       })
       .catch((err) => { console.log('failed to save the movie', err) });
   }
