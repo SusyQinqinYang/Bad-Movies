@@ -21,7 +21,7 @@ class Movies extends React.Component {
       //currently showing movie results.
       this.props.saveMovie(movie);
     } else {
-      console.log(this.props.deleteMovie);
+      // console.log('movie');
       this.props.deleteMovie(movie);
     }
   }

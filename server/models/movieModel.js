@@ -1,47 +1,60 @@
 //Select one db to work with:
+const Promise = require('bluebird');
+const sqlDb = Promise.promisifyAll(require('../../db/sql'));
 
 //For SQL
-const sqlDb = require('../../db/sql');
+// const sqlDb = require('../../db/sql');
 //For Mongo
 const mongoDb = require('../../db/mongodb')
 
+
+
+
 module.exports = {
     save: (movieForSave) => {
-        return mongoDb.save(movieForSave);
+        let queryStr = `insert into movies (popularity, poster_path, movie_id, backdrop_path, title, release_date) values (?, ?, ?, ?, ?, ?)`;
+        let values = [movieForSave.popularity, movieForSave.poster_path, movieForSave.id, movieForSave.backdrop_path, movieForSave.title, movieForSave.release_date]
+        return sqlDb.queryAsync(queryStr, values);
     },
 
     retrieve: () => {
-        return mongoDb.retrieve();
+        let queryStr = 'select * from movies';
+        return sqlDb.queryAsync(queryStr);
     },
 
-    deleteMovie: (id) => {
-        return mongoDb.deleteMovie(id);
+    deleteMovie: (movieId) => {
+        console.log('movieId', movieId);
+        let queryStr = `delete from movies where id = ${movieId}`;
+        return sqlDb.queryAsync(queryStr);
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 //***********************************************************************************************************************
-// router.get('/search', movieController.getSearch)
-// router.get('/genres', movieController.getGenres)
-// router.post('/save', movieController.saveMovie)
-// router.delete('/delete', movieController.deleteMovie)
-//OPTION 1: Use regular routes;
-//If you are using OPTION 1, you do not need routes>movieRoutes.js file
+//mongo
+// module.exports = {
+//     save: (movieForSave) => {
+//         return mongoDb.save(movieForSave);
+//     },
 
-// app.get("/genres", function(req, res) {
-//     // make an axios request to get the official list of genres from themoviedb
-//     // use this endpoint. you will need your API key from signup: https://api.themoviedb.org/3/genre/movie/list
-//   });
+//     retrieve: () => {
+//         return mongoDb.retrieve();
+//     },
 
-//   app.get("/search", function(req, res) {
-//     // use this endpoint to search for movies by genres (using API key): https://api.themoviedb.org/3/discover/movie
-//     // and sort them by votes (worst first) using the search parameters in themoviedb API
-//     // do NOT save the results into the database; render results directly on the page
-//   });
+//     deleteMovie: (id) => {
+//         return mongoDb.deleteMovie(id);
+//     }
+// }
 
-//   app.post("/save", function(req, res) {
-//     //save movie as favorite into the database
-//   });
 
-//   app.post("/delete", function(req, res) {
-//     //remove movie from favorites into the database
-//   });

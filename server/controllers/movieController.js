@@ -39,10 +39,11 @@ module.exports = {
   by express. and yourself are sending another one.
   use res.status to custom your own code if you don't want express to auto identify one for you.*/
   saveMovie: (req, res) => {
+    // console.log('req.body', req.body);
     let movieForSave = req.body.movie;
     movieModel.save(movieForSave)
       .then((result) => {
-        console.log('result after saving', result);
+        // console.log('result after saving', result);
         res.status(201).json(result);
       })
       .catch((err) => {
@@ -54,7 +55,7 @@ module.exports = {
   getFav: (req, res) => {
     movieModel.retrieve()
       .then((result) => {
-        console.log('fav result from db', result);
+        // console.log('fav result from db', result);
         res.json(result);
       })
       .catch((err) => {
